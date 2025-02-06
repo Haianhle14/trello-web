@@ -17,14 +17,15 @@ import Tooltip from '@mui/material/Tooltip'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import { Button } from '@mui/material'
 import ListCards from './ListCards/ListCards'
+import { mapOrder } from '~/utils/sorts'
 
 
-function Column() {
+function Column({ column }) {
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
   const handleClick = (event) => {setAnchorEl(event.currentTarget)}
   const handleClose = () => { setAnchorEl(null) }
-
+  const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
   return (
     <Box sx={{
       minWidth: '300px',
@@ -35,7 +36,7 @@ function Column() {
       height: 'fit-content',
       maxHeight: (theme) => `calc(${theme.trello.boardContentHeight} - ${theme.spacing(5)})`
     }}>
-      {/*Box column 1 */}
+      {/*Box column header */}
       <Box sx={{
         height: (theme) => theme.trello.columnHeaderHeight,
         p: 2,
@@ -47,7 +48,7 @@ function Column() {
           fontWeith: 'bold',
           cursor: 'pointer'
         }}>
-          Column Title
+          {column?.title}
         </Typography>
         <Box>
           <Tooltip>
@@ -100,7 +101,7 @@ function Column() {
       </Box>
 
       {/*Box List Card */}
-      <ListCards></ListCards>
+      <ListCards cards={orderedCards}></ListCards>
       {/*Box Column Footer */}
       <Box sx={{
         height: (theme) => theme.trello.columnFooterHeight,
